@@ -1,16 +1,17 @@
 # Bannerlord Mod Downloader
-ʹ��Blazor Hybrid������д���棬��ʹ��Monotorrent��ʵ���ļ����䡣
+使用Blazor Hybrid技术编写界面，并使用Monotorrent来实现文件传输。
 
-## ʵ�ֹ���
-1. �Զ���ȡ��ϷĿ¼
-1. �Զ�ʶ����Ϸ�汾
-1. �Զ����ض�Ӧ�汾��Mod
-1. ��ʾMod�汾�Ƿ����
-1. �������õ��Զ�����
-1. Mod��������
+## 实现功能
+1. 自动获取游戏目录
+1. 自动识别游戏版本
+1. 点击下载对应版本的Mod
+1. 提示Mod版本是否兼容
+1. 可以设置的自动分享
+1. Mod发布功能
+1. 检测Mod更新功能
 
-## �ֿ����
-1. `BannerlordModDownloader` UI���֣�����Ӧ���ڵ�UI������
-1. `BannerlordModDownloader.Core` ��ź��Ĳ��֣�����������Ӧ���߼���
-1. `BannerlordModDownloader.Downloader` ���������֣�ʵ�����Ƶ����ع���
-1. `BannerlordModDownloader.Cli` �����а汾��ʵ��һЩ����˺�������ģʽ��Ҫ�Ĺ���
+## 分库设计
+1. `BannerlordModDownloader` UI部分，包含应用内的UI设计相关
+1. `BannerlordModDownloader.Core` 存放核心部分，包括完整的应用逻辑。
+1. `BannerlordModDownloader.Downloader` 下载器部分，实现完善的下载功能
+1. `BannerlordModDownloader.Cli` 命令行版本，实现一些服务端和命令行模式需要的功能
