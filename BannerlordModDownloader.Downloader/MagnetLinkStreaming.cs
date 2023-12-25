@@ -78,7 +78,6 @@ namespace BannerlordModDownloader.Downloader {
                     Console.WriteLine($"{message} {time.TotalSeconds:0.00} seconds");
             }
 
-            await manager.StopAsync();
         }
 
         async Task TimedRead(TorrentManager manager, Stream stream, long position, List<(string, TimeSpan)> times, CancellationToken token) {
