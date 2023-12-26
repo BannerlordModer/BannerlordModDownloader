@@ -9,29 +9,45 @@
     </MAppBar>
 
     <MNavigationDrawer App @bind-Value="_drawer">
-        <MList Nav Routable>
+         <MList Nav Routable>
             <MListItem Href="/" ActiveClass="primary--text">
                 <MListItemIcon>
-                    <MIcon>mdi-home</MIcon>
+                    <MIcon>mdi-magnify</MIcon>
                 </MListItemIcon>
                 <MListItemContent>
-                    <MListItemTitle>Home</MListItemTitle>
+                    <MListItemTitle>搜索</MListItemTitle>
                 </MListItemContent>
             </MListItem>
-            <MListItem Href="/counter" ActiveClass="primary--text">
+            <MListItem Href="/download" ActiveClass="primary--text">
                 <MListItemIcon>
-                    <MIcon>mdi-plus</MIcon>
+                    <MIcon>mdi-download</MIcon>
                 </MListItemIcon>
                 <MListItemContent>
-                    <MListItemTitle>Counter</MListItemTitle>
+                    <MListItemTitle>下载中</MListItemTitle>
                 </MListItemContent>
             </MListItem>
-            <MListItem Href="/fetchdata" ActiveClass="primary--text">
+            <MListItem Href="/library" ActiveClass="primary--text">
                 <MListItemIcon>
-                    <MIcon>mdi-list-box</MIcon>
+                    <MIcon>mdi-apps</MIcon>
                 </MListItemIcon>
                 <MListItemContent>
-                    <MListItemTitle>Fetch data</MListItemTitle>
+                    <MListItemTitle>库</MListItemTitle>
+                </MListItemContent>
+            </MListItem>
+            <MListItem Href="/publish" ActiveClass="primary--text">
+                <MListItemIcon>
+                    <MIcon>mdi-publish</MIcon>
+                </MListItemIcon>
+                <MListItemContent>
+                    <MListItemTitle>发布</MListItemTitle>
+                </MListItemContent>
+            </MListItem>
+            <MListItem Href="/options" ActiveClass="primary--text">
+                <MListItemIcon>
+                    <MIcon>mdi-cog</MIcon>
+                </MListItemIcon>
+                <MListItemContent>
+                    <MListItemTitle>设置</MListItemTitle>
                 </MListItemContent>
             </MListItem>
         </MList>
