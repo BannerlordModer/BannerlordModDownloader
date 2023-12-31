@@ -51,6 +51,7 @@ namespace BannerlordModDownloader.Downloader {
             await manager.StartAsync();
             await manager.WaitForMetadataAsync(token);
 
+
             var largestFile = manager.Files.OrderByDescending(t => t.Length).First();
             var stream = await manager?.StreamProvider?.CreateStreamAsync(largestFile, false, token);
 

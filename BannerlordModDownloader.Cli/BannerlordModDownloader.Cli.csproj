@@ -8,4 +8,8 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BannerlordModDownloader.Downloader\BannerlordModDownloader.Downloader.csproj" />
+  </ItemGroup>
+
 </Project>

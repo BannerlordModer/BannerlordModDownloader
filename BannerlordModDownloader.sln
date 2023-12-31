@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BannerlordModDownloader.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BannerlordModDownloader.Downloader", "BannerlordModDownloader.Downloader\BannerlordModDownloader.Downloader.csproj", "{D36E3B39-F35B-4FBC-94AB-AE4366257C95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BannerlordModDownloader.Downloader.Test", "BannerlordModDownloader.Downloader.Test\BannerlordModDownloader.Downloader.Test.csproj", "{59EDAB3A-B453-48CF-9D55-BF91B04C9928}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D36E3B39-F35B-4FBC-94AB-AE4366257C95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D36E3B39-F35B-4FBC-94AB-AE4366257C95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D36E3B39-F35B-4FBC-94AB-AE4366257C95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59EDAB3A-B453-48CF-9D55-BF91B04C9928}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EDAB3A-B453-48CF-9D55-BF91B04C9928}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59EDAB3A-B453-48CF-9D55-BF91B04C9928}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EDAB3A-B453-48CF-9D55-BF91B04C9928}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
