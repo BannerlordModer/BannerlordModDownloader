@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -10,23 +11,12 @@ using MonoTorrent.Client;
 
 namespace BannerlordModDownloader.Downloader {
     public class Downloader {
-        static void Main(string[] args) {
-            CancellationTokenSource cancellation = new CancellationTokenSource();
-
-            var task = MainAsync(args, cancellation.Token);
-
-            // We need to cleanup correctly when the user closes the window by using ctrl-c
-            // or an unhandled exception happens
-            Console.CancelKeyPress += delegate { cancellation.Cancel(); task.Wait(); };
-            AppDomain.CurrentDomain.ProcessExit += delegate { cancellation.Cancel(); task.Wait(); };
-            AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs e) { Console.WriteLine(e.ExceptionObject); cancellation.Cancel(); task.Wait(); };
-            Thread.GetDomain().UnhandledException += delegate (object sender, UnhandledExceptionEventArgs e) { Console.WriteLine(e.ExceptionObject); cancellation.Cancel(); task.Wait(); };
-
-            task.Wait();
-        }
-
-        static async Task MainAsync(string[] args, CancellationToken token) {
-            const int httpListeningPort = 55125;
+        private ClientEngine Engine {  get; set; }
+        private CancellationTokenSource Cancellation {  get; set; }
+        private DownloadConfig Config {  get; set; }
+        public Downloader (DownloadConfig config) {
+            Config = config;
+            Cancellation = new CancellationTokenSource();
             // Give an example of how settings can be modified for the engine.
             var settingBuilder = new EngineSettingsBuilder {
                 // Allow the engine to automatically forward ports using upnp/nat-pmp (if a compatible router is available)
@@ -48,51 +38,28 @@ namespace BannerlordModDownloader.Downloader {
 
                 // Use a fixed port to accept incoming connections from other peers for testing purposes. Production usages should use a random port, 0, if possible.
                 ListenEndPoints = new Dictionary<string, IPEndPoint> {
-                    { "ipv4", new IPEndPoint (IPAddress.Any, 55123) },
-                    { "ipv6", new IPEndPoint (IPAddress.IPv6Any, 55123) }
+                    { "ipv4", new IPEndPoint (IPAddress.Any, config.ListenPort) },
+                    { "ipv6", new IPEndPoint (IPAddress.IPv6Any, config.ListenPort) }
                 },
 
                 // Use a fixed port for DHT communications for testing purposes. Production usages should use a random port, 0, if possible.
-                DhtEndPoint = new IPEndPoint(IPAddress.Any, 55123),
+                DhtEndPoint = new IPEndPoint(IPAddress.Any, config.ListenPort),
 
-
-                // Wildcards such as these are supported as long as the underlying .NET framework version, and the operating system, supports them:
-                //HttpStreamingPrefix = $"http://+:{httpListeningPort}/"
-                //HttpStreamingPrefix = $"http://*.mydomain.com:{httpListeningPort}/"
-
-                // For now just bind to localhost.
-                HttpStreamingPrefix = $"http://127.0.0.1:{httpListeningPort}/"
             };
-            using var engine = new ClientEngine(settingBuilder.ToSettings());
-
-            Task task;
-            if (!MagnetLink.TryParse(args[0], out MagnetLink link)) {
+            Engine = new ClientEngine(settingBuilder.ToSettings());
+        }
+        public async Task DownloadLink(string Magnetlink) {
+            if (!MagnetLink.TryParse(Magnetlink, out MagnetLink link)) {
                 throw new MagnetException("Cannot parse Magnet link!");
             }
-            task = new MagnetLinkStreaming(engine).DownloadAsync(link, token);
-            if (engine.Settings.AllowPortForwarding)
-                Console.WriteLine("uPnP or NAT-PMP port mappings will be created for any ports needed by MonoTorrent");
-
-            try {
-                await task;
-            } catch (OperationCanceledException) {
-
-            }
-
-            foreach (var manager in engine.Torrents) { 
-                while (manager?.State != TorrentState.Stopped) {
-                    Console.WriteLine("{0} is {1}", manager?.Torrent?.Name, manager?.State);
-                    await Task.WhenAll(Task.Delay(250));
-                }
-                if (engine.Settings.AutoSaveLoadFastResume)
-                    Console.WriteLine($"FastResume data for {manager.Torrent?.Name ?? manager.InfoHashes.V1?.ToHex() ?? manager.InfoHashes.V2?.ToHex()} has been written to disk.");
-            }
-
-            if (engine.Settings.AutoSaveLoadDhtCache)
-                Console.WriteLine($"DHT cache has been written to disk.");
-
-            if (engine.Settings.AllowPortForwarding)
-                Console.WriteLine("uPnP and NAT-PMP port mappings have been removed");
+            var manager = await Engine.AddStreamingAsync(link, Config.SaveDirectory);
+            await manager.StartAsync();
+            await manager.WaitForMetadataAsync(Cancellation.Token);
         }
+
+        public IEnumerable<(string, double)> GetDownloadStatus() {
+            return Engine.Torrents.Select(manager => (manager.InfoHashes.V1.ToHex(), manager.PartialProgress));
+        }
+
     }
 }
