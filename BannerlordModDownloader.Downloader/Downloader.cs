@@ -26,6 +26,14 @@ namespace BannerlordModDownloader.Downloader {
                 MaximumConnections = 10000,
                 MaximumHalfOpenConnections = 100,
                 MaximumOpenFiles = 100,
+                AllowHaveSuppression = true,
+                AllowedEncryption = new List<MonoTorrent.Connections.EncryptionType>() { 
+                    MonoTorrent.Connections.EncryptionType.PlainText, 
+                    MonoTorrent.Connections.EncryptionType.RC4Header, 
+                    MonoTorrent.Connections.EncryptionType.RC4Full 
+                },
+                WebSeedSpeedTrigger = 0,
+                WebSeedDelay = TimeSpan.Zero,
                 // Allow the engine to automatically forward ports using upnp/nat-pmp (if a compatible router is available)
                 AllowPortForwarding = true,
 
