@@ -42,7 +42,7 @@
             ClientSize = new Size(1280, 720);
             Controls.Add(blazorWebView1);
             Name = "MainFrom";
-            Text = "Form1";
+            Text = "骑砍2Mod下载器";
             ResumeLayout(false);
         }
 
