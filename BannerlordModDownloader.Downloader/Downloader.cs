@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -61,7 +62,22 @@ namespace BannerlordModDownloader.Downloader {
                 DhtEndPoint = new IPEndPoint(IPAddress.Any, config.ListenPort+1),
 
             };
-            Engine = new ClientEngine(settingBuilder.ToSettings());
+            var factories = new Factories();
+            factories.WithHttpClientCreator((AddressFamily family) => {
+                HttpClientHandler httpClientHandler = new HttpClientHandler();
+                httpClientHandler.UseProxy = false; // Disable the system proxy settings
+                HttpClient client = new HttpClient(httpClientHandler);
+
+                //HttpClient httpClient = new HttpClient(httpClientHandler, family switch {
+                //    AddressFamily.InterNetwork => CachedIPv4HttpClient,
+                //    AddressFamily.InterNetworkV6 => CachedIPv6HttpClient,
+                //    _ => CachedAnyHttpClient,
+                //}, disposeHandler: false);
+                //httpClient.DefaultRequestHeaders.Add("User-Agent", MonoTorrent.GitInfoHelper.ClientVersion);
+                //httpClient.Timeout = TimeSpan.FromSeconds(30.0);
+                return client;
+            });
+            Engine = new ClientEngine(settingBuilder.ToSettings(), factories: factories);
         }
         public async Task DownloadLink(string Magnetlink) {
             if (TrackerList.Count == 0) {
